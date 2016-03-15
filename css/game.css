@@ -1,3 +1,10 @@
 .cell {
 	position: absolute;
+	border: 1px white solid;
+}
+
+.area{
+	width: 400px; 
+	height: 400px; 
+	position: relative;
 }

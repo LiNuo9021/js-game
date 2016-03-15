@@ -18,3 +18,5 @@ Cell.prototype.build = function(){
 
 	document.querySelector(".area").appendChild(this.node);
 };
+
+Cell.color = ["#F3C36A", "#26CA26", "#4D73EB", "#D886D8", "red"];

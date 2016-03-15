@@ -1,22 +1,38 @@
-var Cell = function(color, XY){
+var Cell = function(color, XY, engine){
 	this.color = color;
 	this.XY = XY;
-	this.node = null;
+	this.node = this.build();
+
+	window.addEventListener("click", this);
+
+	this._engine = engine;
 };
 
 Cell.prototype.build = function(){
-	this.node = document.createElement("div");
+	var node = document.createElement("div");
 
-	this.node.classList.add("cell");
+	node.id = Math.random();
 
-	this.node.style.background = this.color;
-	this.node.style.width = "40px";
-	this.node.style.height = "40px";
+	node.classList.add("cell");
 
-	this.node.style.left = 40 * this.XY.y + "px";
-	this.node.style.bottom = 40 * this.XY.x + "px";
+	node.style.background = this.color;
+	node.style.width = "40px";
+	node.style.height = "40px";
 
-	document.querySelector(".area").appendChild(this.node);
+	node.style.left = 40 * this.XY.y + "px";
+	node.style.bottom = 40 * this.XY.x + "px";
+
+	document.querySelector(".area").appendChild(node);
+
+	return node;
+};
+
+Cell.prototype.handleEvent = function(){
+	
+	this._engine.remove(this.node.id);
+
+	// console.log("click cell");
+	// document.querySelector(".area").removeChild(this.node);	
 };
 
 Cell.color = ["#F3C36A", "#26CA26", "#4D73EB", "#D886D8", "red"];

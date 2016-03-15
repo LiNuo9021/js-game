@@ -33,20 +33,26 @@ Engine.prototype.buildArea = function(){
 };
 
 
+//随机生成不同颜色滑块，最多34个
+//TODO:最少8个
 Engine.prototype.randomCell = function(i , j){
 	var cellColor = Cell.color.random();
 			
 	if(this.colorCount[cellColor] < 34){
 		this.colorCount[cellColor] += 1;
-
-		new Cell(cellColor, new XY(i,j)).build();
-
+		new Cell(cellColor, new XY(i,j), this);
 		return;
 	}
 	else{
 		randomCell(i, j);
 	}
 }
+
+
+Engine.prototype.remove = function(cell){
+	console.log(cell.id);
+};
+
 
 
 Array.prototype.random = function() {

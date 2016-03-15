@@ -10,11 +10,11 @@ Cell.prototype.build = function(){
 	this.node.classList.add("cell");
 
 	this.node.style.background = this.color;
-	this.node.style.width = "10px";
-	this.node.style.height = "10px";
+	this.node.style.width = "40px";
+	this.node.style.height = "40px";
 
-	this.node.style.left = 10 * this.XY.y + "px";
-	this.node.style.bottom = 10 * this.XY.x + "px";
+	this.node.style.left = 40 * this.XY.y + "px";
+	this.node.style.bottom = 40 * this.XY.x + "px";
 
-	document.querySelector("body").appendChild(this.node);
+	document.querySelector(".area").appendChild(this.node);
 };

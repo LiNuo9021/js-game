@@ -5,18 +5,20 @@
 	<title>老年乐</title>
 	<script src="js/cell.js"></script>
 	<script src="js/xy.js"></script>
+		<link rel="stylesheet" href="css/game.css" type="text/css" />
 </head>
 <body>
 
-<div class="area" style="border: 1px solid green; width:200px; height:200px">
+<div class="area" style="border: 1px solid green; width: 400px; height: 400px; position: relative">
 
 </div>
 
 </body>
 <script type="text/javascript">
 
-	new Cell("red", new XY(2,2)).build();
-	new Cell("green", new XY(30,30)).build();
+	new Cell("red", new XY(0,0)).build();
+	new Cell("green", new XY(3,3)).build();
+	new Cell("orange", new XY(9,9)).build();
 
 </script>
 </html>

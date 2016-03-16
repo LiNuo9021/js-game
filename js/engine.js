@@ -14,8 +14,8 @@ var Engine = function(){
 };
 
 
-//随机构建100个滑块，填充游戏区域
 /*
+	构建游戏区域
 	规则：
 		5种颜色都要有
 		数量最少为8个，最多为32个
@@ -48,9 +48,28 @@ Engine.prototype.randomCell = function(i , j){
 	}
 }
 
-
+/*
+	删除色块群
+	规则：
+		点击一个色块，本色块被删除，与之上下左右相邻的同色色块被删除；与被删除色块的上下左右相邻的同色色块也被删除
+		当某一行的色块全被消除后，其右侧所有色块左移
+		当某一列的色块被消除后，其上方所有色块下移
+		当没有相邻的同色色块时，游戏结束
+*/
 Engine.prototype.remove = function(cell){
-	console.log(cell.id);
+
+	//点击色块的相邻色块，是否有同色的，如果有，记录，再继续查找被记录的色块的相邻同色色块；直到没有了，开始删除所有被记录色块
+
+	var removingCell = new Array();
+	removingCell.push(cell);
+
+	//通过left/bottom判断上下左右滑块
+
+
+
+	removingCell.forEach(function(cell){
+		cell.remove();
+	},this);
 };
 
 

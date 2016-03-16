@@ -1,11 +1,12 @@
 var Cell = function(color, XY, engine){
 	this.color = color;
 	this.XY = XY;
-	this.node = this.build();
-
-	window.addEventListener("click", this);
 
 	this._engine = engine;
+	
+	this.node = this.build();
+	window.addEventListener("click", this);//怀疑所有的对象、所有的动作都会走handleEvent
+
 };
 
 Cell.prototype.build = function(){
@@ -22,17 +23,21 @@ Cell.prototype.build = function(){
 	node.style.left = 40 * this.XY.y + "px";
 	node.style.bottom = 40 * this.XY.x + "px";
 
-	document.querySelector(".area").appendChild(node);
+	this._engine.area.appendChild(node);
 
 	return node;
 };
 
-Cell.prototype.handleEvent = function(){
-	
-	this._engine.remove(this.node.id);
+Cell.prototype.remove = function(cell){
+	this._engine.area.removeChild(cell);
+};
 
-	// console.log("click cell");
-	// document.querySelector(".area").removeChild(this.node);	
+Cell.prototype.handleEvent = function(e){
+	
+	if(e.target.id === this.node.id){
+		this._engine.remove(this.node);
+	}
 };
 
 Cell.color = ["#F3C36A", "#26CA26", "#4D73EB", "#D886D8", "red"];
+

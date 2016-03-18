@@ -13,6 +13,10 @@ var Engine = function(){
 	};
 
 	this.cell = {};//"1,2":cell
+
+	this.curCell = null;
+
+	this.removingCell = null;
 };
 
 
@@ -42,7 +46,7 @@ Engine.prototype.randomCell = function(i , j){
 			
 	if(this.colorCount[cellColor] < 34){
 		this.colorCount[cellColor] += 1;
-		this.cell[i + "," + j] = new Cell(cellColor, new XY(i,j), this);
+		this.cell[i + "," + j] = new Cell(cellColor, new XY(i,j), this, true);
 		return;
 	}
 	else{
@@ -61,8 +65,8 @@ Engine.prototype.randomCell = function(i , j){
 Engine.prototype.remove = function(cell){
 
 	//点击色块的相邻色块，是否有同色的，如果有，记录，再继续查找被记录的色块的相邻同色色块；直到没有了，开始删除所有被记录色块
-	var removingCell = new Array();
-	removingCell.push(cell);
+	this.removingCell = new Array();
+	this.removingCell.push(cell);
 
 	/*
 		找到相邻色块
@@ -70,20 +74,14 @@ Engine.prototype.remove = function(cell){
 			二维数组/对象，存储所有色块
 				(2,3)-->(1,3),(3,3),(2,1),(2,4)
 	*/
-	// console.log(this.cell[cell.XY.x+","+cell.XY.y])
-
 	cell.around();
-	console.log(cell.cellAround);
 
-	// console.log(this.cell[(cell.XY.x+1)+","+(cell.XY.y)].XY);
-	// console.log(this.cell[(cell.XY.x-1)+","+(cell.XY.y)].XY);
-	// console.log(this.cell[(cell.XY.x)+","+(cell.XY.y+1)].XY);
-	// console.log(this.cell[(cell.XY.x)+","+(cell.XY.y-1)].XY);
-
-
-	removingCell.forEach(function(cell){
-		cell.remove();
-	},this);
+	if(this.removingCell.length > 1){
+		this.removingCell.forEach(function(cell){
+			cell.remove();
+			delete this.cell[cell.XY];
+		},this);
+	}
 };
 
 

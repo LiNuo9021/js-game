@@ -11,3 +11,7 @@ XY.prototype.add = function(XY){
 XY.prototype.toString = function(){
 	return this.x + "," + this.y;
 };
+
+XY.prototype.clone = function() {
+	return new XY(this.x, this.y);
+}

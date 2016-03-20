@@ -76,12 +76,102 @@ Engine.prototype.remove = function(cell){
 	*/
 	cell.around();
 
+	//循环删除所有色块
 	if(this.removingCell.length > 1){
 		this.removingCell.forEach(function(cell){
 			cell.remove();
 			delete this.cell[cell.XY];
 		},this);
+	
+		console.log("removingCell: ");
+		console.log(this.removingCell);
+		/*
+			被删除色块的上方色块下移
+			规则：被删除色块的列中，所有悬空的色块，都下降，直至没有悬空的色块为止
+			步骤：
+				1.列出所有列（横坐标）
+				2.列中
+					纵坐标从低到高遍历剩余色块，每个色块下降到其下方色块的纵坐标（没有则为0）+1
+					省5,9
+					对5
+						3、4没了，下降到3
+					对9
+						4、5、6、7、8没了，下降到4
+		*/
+		var dropCellObj = this.getDropCell(this.removingCell);
+		var dropCellCoor = dropCellObj["dropCellCoor"];
+		var dropCellx = Object.keys(dropCellCoor);
+		
+		for(var i = 0; i < dropCellx.length; i++){
+			var x = dropCellx[i];
+			var minY = -1;
+
+			for(var j = 0; j < 10; j++){
+				var stillCell = this.cell[x + "," + j];
+
+				//剩余色块
+				if(stillCell !== undefined){
+					//第一个
+					if(j === 0){
+						minY = j;
+						continue;
+					}
+					//如果比上一个的坐标只高1，则说明没有空余，什么都不做
+					else if(j === (minY + 1)){
+						minY = j;
+						continue
+					}
+					else{
+						var tmpXY = stillCell.XY;
+						var gravity = new XY(0, (j - minY - 1));
+						tmpXY.minus(gravity);
+						
+						this.cell[x + "," + j].XY = tmpXY;//改变了属性值，还要改变属性名
+						this.cell[tmpXY.x + "," + tmpXY.y] = this.cell[x + "," + j];
+					
+						delete this.cell[x + "," + j];
+
+						//重置minY
+						minY = tmpXY.y;
+					}
+				}
+			}
+
+		}	
 	}
+
+};
+
+/*
+	返回应该下降的色块
+*/
+Engine.prototype.getDropCell = function(removingCell){
+	var dropCellCoor = new Object();
+	var dropCellCount = new Object();
+
+	for(var i = 0; i < removingCell.length; i++){
+		var x = removingCell[i].XY.x;
+		var y = removingCell[i].XY.y;
+
+		//不在数组中，则保留
+		if(dropCellCoor[x] === undefined){
+			dropCellCoor[x] = y;
+			dropCellCount[x] = 0;
+		}
+		//在数组中，则判断y是否最大
+		else{
+			dropCellCoor[x] = (dropCellCoor[x] < y ? y : dropCellCoor[x]);
+		}
+		//无论是否在，该列的个数都加1
+		dropCellCount[x] += 1;
+	}
+
+	var result = {
+		"dropCellCoor": dropCellCoor,
+		"dropCellCount": dropCellCount
+	};
+
+	return result;
 };
 
 

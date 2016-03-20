@@ -8,6 +8,11 @@ XY.prototype.add = function(XY){
 	this.y += XY.y;
 };
 
+XY.prototype.minus = function(XY){
+	this.x -= XY.x;
+	this.y -= XY.y;
+};
+
 XY.prototype.toString = function(){
 	return this.x + "," + this.y;
 };

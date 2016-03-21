@@ -31,26 +31,35 @@ var Engine = function(){
 
 */
 Engine.prototype.buildArea = function(){
+	var lessColor = Cell.color.random();
+	var lessColor2 = Cell.color.random();
+	console.log(lessColor + "-" + lessColor2);
+
 	for(var i = 0; i < 10; i++){
 		for(var j = 0; j < 10; j++){
-			this.randomCell(i , j);
+			this.generateCell(i, j, lessColor, lessColor2);
 		}
 	}
 };
 
 
-//随机生成不同颜色滑块，最多34个
-//TODO:最少8个
-Engine.prototype.randomCell = function(i , j){
+/*
+	随机生成不同颜色滑块
+	规则：最多35个；有2种颜色在13个以下；上下左右没有同色的色块，不得超过8个
+*/
+Engine.prototype.generateCell = function(i, j, lessColor, lessColor2){
 	var cellColor = Cell.color.random();
-			
-	if(this.colorCount[cellColor] < 34){
+	
+	//最多35个		
+	if(this.colorCount[cellColor] > 35 
+		|| (cellColor === lessColor && this.colorCount[cellColor] > 7)
+		|| (cellColor === lessColor2 && this.colorCount[cellColor] > 7)){
+		this.generateCell(i, j, lessColor, lessColor2);
+	}
+	else{
 		this.colorCount[cellColor] += 1;
 		this.cell[i + "," + j] = new Cell(cellColor, new XY(i,j), this, true);
 		return;
-	}
-	else{
-		randomCell(i, j);
 	}
 }
 

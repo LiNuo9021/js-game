@@ -95,15 +95,6 @@ Engine.prototype.remove = function(cell){
 
 			被删除色块的上方色块下移
 			规则：被删除色块的列中，所有悬空的色块，都下降，直至没有悬空的色块为止
-			步骤：
-				1.列出所有列（横坐标）
-				2.列中
-					纵坐标从低到高遍历剩余色块，每个色块下降到其下方色块的纵坐标（没有则为0）+1
-					省5,9
-					对5
-						3、4没了，下降到3
-					对9
-						4、5、6、7、8没了，下降到4
 		*/
 		var dropCellObj = this.getDropCell(this.removingCell);
 		var dropCellCoor = dropCellObj["dropCellCoor"];
@@ -115,7 +106,7 @@ Engine.prototype.remove = function(cell){
 			var x = dropCellx[i];
 			var minY = -1;
 			var emptyNum = 0;
-			
+
 			for(var j = 0; j < 10; j++){
 				var stillCell = this.cell[x + "," + j];
 
@@ -145,23 +136,56 @@ Engine.prototype.remove = function(cell){
 						minY = tmpXY.y;
 					}
 				}
-
 				//如果本列没有剩余色块，则其右侧色块要全部左移
 				else{
 					emptyNum++;
 				}
 
+				//整列都被删除	
 				if(emptyNum === 10){
 					emptyCol.push(x);
-					console.log("emptyCol: ");
-					console.log(emptyCol);
 				}
 			}
-			
-		}	
+		}
+
+		this.left(emptyCol);
 	}
 
 };
+
+/*
+	使空列右侧的列整体左移
+	步骤
+		num: 空列数量，即左移数量
+		max: 最大空列横坐标，大于横坐标的都是要左移的列
+		左移的列的横坐标－空列数量
+*/
+Engine.prototype.left = function(emptyCol){
+	var num = (emptyCol !== undefined ? emptyCol.length : 0);
+	var max = (emptyCol !== undefined ? parseInt(emptyCol[0]) : 0);
+
+	if(emptyCol.length > 0){
+		for(var i = 0; i < emptyCol.length; i++){
+			if(max < parseInt(emptyCol[i])){
+				max = parseInt(emptyCol[i]);
+			}
+		}
+		
+		var left = new XY(1,0);
+		for(var x = (max+1); x < 10; x++){
+			for(var y = 0; y < 10; y++){
+				var originCell = this.cell[x + "," + y];
+				if(originCell !== undefined){
+					var newCell = originCell.clone();
+					newCell.XY.minus(left);
+					this.cell[newCell.XY.x + "," + newCell.XY.y] = newCell;
+					delete originCell;
+				}
+			}
+		}
+	}
+};
+
 
 /*
 	返回应该下降的色块

@@ -58,8 +58,8 @@ Engine.prototype.randomCell = function(i , j){
 	删除色块群
 	规则：
 		点击一个色块，本色块被删除，与之上下左右相邻的同色色块被删除；与被删除色块的上下左右相邻的同色色块也被删除
-		当某一行的色块全被消除后，其右侧所有色块左移
 		当某一列的色块被消除后，其上方所有色块下移
+		当某一列的色块全被消除后，其右侧所有色块左移
 		当没有相邻的同色色块时，游戏结束
 */
 Engine.prototype.remove = function(cell){
@@ -83,9 +83,16 @@ Engine.prototype.remove = function(cell){
 			delete this.cell[cell.XY];
 		},this);
 	
-		console.log("removingCell: ");
-		console.log(this.removingCell);
+		// console.log("removingCell: ");
+		// console.log(this.removingCell);
+
+		//显示分数
+		this.score += this.removingCell.length * this.removingCell.length;
+		document.querySelector("#myScore").innerHTML = this.score;
+
 		/*
+			TOFIX：这里可以再抽象，代码太乱
+
 			被删除色块的上方色块下移
 			规则：被删除色块的列中，所有悬空的色块，都下降，直至没有悬空的色块为止
 			步骤：
@@ -102,10 +109,13 @@ Engine.prototype.remove = function(cell){
 		var dropCellCoor = dropCellObj["dropCellCoor"];
 		var dropCellx = Object.keys(dropCellCoor);
 		
+		var emptyCol = new Array();
+
 		for(var i = 0; i < dropCellx.length; i++){
 			var x = dropCellx[i];
 			var minY = -1;
-
+			var emptyNum = 0;
+			
 			for(var j = 0; j < 10; j++){
 				var stillCell = this.cell[x + "," + j];
 
@@ -135,8 +145,19 @@ Engine.prototype.remove = function(cell){
 						minY = tmpXY.y;
 					}
 				}
-			}
 
+				//如果本列没有剩余色块，则其右侧色块要全部左移
+				else{
+					emptyNum++;
+				}
+
+				if(emptyNum === 10){
+					emptyCol.push(x);
+					console.log("emptyCol: ");
+					console.log(emptyCol);
+				}
+			}
+			
 		}	
 	}
 

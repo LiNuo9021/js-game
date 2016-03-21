@@ -171,15 +171,16 @@ Engine.prototype.left = function(emptyCol){
 			}
 		}
 		
-		var left = new XY(1,0);
+		var left = new XY(num,0);
 		for(var x = (max+1); x < 10; x++){
 			for(var y = 0; y < 10; y++){
 				var originCell = this.cell[x + "," + y];
 				if(originCell !== undefined){
-					var newCell = originCell.clone();
-					newCell.XY.minus(left);
-					this.cell[newCell.XY.x + "," + newCell.XY.y] = newCell;
-					delete originCell;
+					var newCellXY = new XY(originCell.XY.x, originCell.XY.y);
+					newCellXY.minus(left);
+					originCell.XY = newCellXY;
+					this.cell[newCellXY.x + "," + newCellXY.y] = originCell;
+					delete this.cell[x + "," + y];
 				}
 			}
 		}

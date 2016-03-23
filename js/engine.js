@@ -31,13 +31,13 @@ var Engine = function(){
 
 */
 Engine.prototype.buildArea = function(){
-	var lessColor = Cell.color.random();
-	var lessColor2 = Cell.color.random();
-	console.log(lessColor + "-" + lessColor2);
+	// var lessColor = Cell.color.random();
+	// var lessColor2 = Cell.color.random();
+	// console.log(lessColor + "-" + lessColor2);
 
 	for(var i = 0; i < 10; i++){
 		for(var j = 0; j < 10; j++){
-			this.generateCell(i, j, lessColor, lessColor2);
+			var lastColor = this.generateCell(i, j, lastColor);
 		}
 	}
 };
@@ -45,21 +45,19 @@ Engine.prototype.buildArea = function(){
 
 /*
 	随机生成不同颜色滑块
-	规则：最多35个；有2种颜色在13个以下；上下左右没有同色的色块，不得超过8个
+	规则：最多35个；
 */
-Engine.prototype.generateCell = function(i, j, lessColor, lessColor2){
+Engine.prototype.generateCell = function(i, j, lastColor){
 	var cellColor = Cell.color.random();
 	
 	//最多35个		
-	if(this.colorCount[cellColor] > 35 
-		|| (cellColor === lessColor && this.colorCount[cellColor] > 7)
-		|| (cellColor === lessColor2 && this.colorCount[cellColor] > 7)){
-		this.generateCell(i, j, lessColor, lessColor2);
+	if(this.colorCount[cellColor] > 35){
+		this.generateCell(i, j);
 	}
 	else{
 		this.colorCount[cellColor] += 1;
 		this.cell[i + "," + j] = new Cell(cellColor, new XY(i,j), this, true);
-		return;
+		return cellColor;
 	}
 }
 
@@ -233,5 +231,19 @@ Engine.prototype.getDropCell = function(removingCell){
 
 
 Array.prototype.random = function() {
+	//Math.random()返回(0,1)之间的某个小数
+	//Math.floor()返回小数的整数部分
 	return this[Math.floor(Math.random() * this.length)];
+
+	0-1	20% 5%
+	1-2 20% 5%
+	2-3	20%	5%
+	3-4	20%	5%
+	4-5	20%	80%
+
+
 }
+
+
+
+

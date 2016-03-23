@@ -5,11 +5,11 @@ var Engine = function(){
 	this.area = document.querySelector(".area");
 
 	this.colorCount = {
-		"#F3C36A": 0,
-		"#26CA26": 0,
-		"#4D73EB": 0,
-		"#D886D8": 0,
-		"red": 0
+		"#F1A40D": 0,
+		"#B1CA24": 0,
+		"#27AAEE": 0,
+		"#B14CE0": 0,
+		"#F04949": 0
 	};
 
 	this.cell = {};//"1,2":cell
@@ -31,13 +31,11 @@ var Engine = function(){
 
 */
 Engine.prototype.buildArea = function(){
-	// var lessColor = Cell.color.random();
-	// var lessColor2 = Cell.color.random();
-	// console.log(lessColor + "-" + lessColor2);
 
 	for(var i = 0; i < 10; i++){
-		for(var j = 0; j < 10; j++){
-			var lastColor = this.generateCell(i, j, lastColor);
+		var lastColor = null;
+		for(var j = 9; j >= 0; j--){
+			lastColor = this.generateCell(i, j, lastColor);
 		}
 	}
 };
@@ -48,7 +46,19 @@ Engine.prototype.buildArea = function(){
 	规则：最多35个；
 */
 Engine.prototype.generateCell = function(i, j, lastColor){
-	var cellColor = Cell.color.random();
+
+	var width = [1,1,1,1,1];
+
+	if(lastColor !== null){
+		for(var z = 0; z < Cell.color.length; z++){
+			if(Cell.color[z] === lastColor){
+				width[z] = 10;//在这里调整权重
+				break;
+			}
+		}
+	}
+
+	var cellColor = rand(Cell.color, width);
 	
 	//最多35个		
 	if(this.colorCount[cellColor] > 35){
@@ -234,16 +244,26 @@ Array.prototype.random = function() {
 	//Math.random()返回(0,1)之间的某个小数
 	//Math.floor()返回小数的整数部分
 	return this[Math.floor(Math.random() * this.length)];
-
-	0-1	20% 5%
-	1-2 20% 5%
-	2-3	20%	5%
-	3-4	20%	5%
-	4-5	20%	80%
-
-
 }
 
+/*
+	根据权重随机返回数组元素
+	ele: ["red", "green", "blue", "yellow"]
+	width: [0.1,0.2,0.5,0.2]
+*/
+function rand(ele,width){
+	var result = new Array();
+
+	for(var i = 0; i < ele.length; i++){
+		var num = width[i] * 10;
+	
+		for(var j = 0; j < num; j++){
+			result.push(ele[i]);
+		}
+	}
+
+	return result.random();
+}
 
 
 

@@ -133,7 +133,7 @@ Cell.prototype.handleEvent = function(e){
 };
 
 
-Cell.color = ["#F3C36A", "#26CA26", "#4D73EB", "#D886D8", "red"];
+Cell.color = ["#F1A40D", "#B1CA24", "#27AAEE", "#B14CE0", "#F04949"];
 
 function isRemoving(sibling, cell){
 	for(var j = 0; j < cell._engine.removingCell.length; j++){

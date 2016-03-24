@@ -17,6 +17,10 @@ var Engine = function(){
 	this.curCell = null;
 
 	this.removingCell = null;
+
+	this._interval = null;
+
+	this.desXY = null;
 };
 
 
@@ -122,11 +126,11 @@ Engine.prototype.move = function(){
 				}
 				else{
 					var tmpXY = stillCell.XY;
-					var gravity = new XY(0, (j - minY - 1));
-					tmpXY.minus(gravity);
+					this.desXY = new XY(x, (minY+1));
 					
-					this.down(x, j, tmpXY);
-					//this.cell[x + "," + j].XY = tmpXY;//改变了属性值，还要改变属性名
+					// tmpXY.minus(gravity);
+					this.down(x, j);
+					// this.cell[x + "," + j].XY = tmpXY;//改变了属性值，还要改变属性名
 					this.cell[tmpXY.x + "," + tmpXY.y] = this.cell[x + "," + j];
 				
 					delete this.cell[x + "," + j];
@@ -150,22 +154,28 @@ Engine.prototype.move = function(){
 	this.left(emptyCol);
 };
 
-Engine.prototype.down = function(x, j, tmpXY){
+Engine.prototype.down = function(x, j){
 	
-	var oriXY = this.cell[x + "," + j].XY;
-	var curXY = tmpXY;
-	var gravity = new XY(0,1);
-	
-
 	/*
 		循环，每次原坐标的纵坐标-1，直到达到现坐标 
 	*/
-	while(oriXY.y === curXY.y){
-		oriXY.minus(gravity); 
-	}
+	this._interval = setInterval(this.tick.bind(this,x,j),500);
 
 	// this.cell[x + "," + j].XY = tmpXY;
 };
+
+Engine.prototype.tick = function(){
+	var oriXY = this.cell[x + "," + j].XY;
+	if(this.desXY.y === oriXY.y){
+		clearInterval(this._interval);
+		return;
+	}
+	var gravity = new XY(0,1);
+	oriXY.minus(gravity); 
+	this.cell[x + "," + j].XY = oriXY;
+};
+
+
 
 
 /*

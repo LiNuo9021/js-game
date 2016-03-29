@@ -155,24 +155,27 @@ Engine.prototype.move = function(){
 };
 
 Engine.prototype.down = function(x, j){
-	
-	/*
-		循环，每次原坐标的纵坐标-1，直到达到现坐标 
-	*/
-	this._interval = setInterval(this.tick.bind(this,x,j),500);
+
+	this._interval = setInterval(function hello() {
+
+		var oriXY = this.cell[x + "," + j].XY;
+
+		if(this.desXY.y === oriXY.y){
+			clearTimeout(this._interval);
+			return;
+		}
+		var gravity = new XY(0,1);
+		oriXY.minus(gravity); 
+		this.cell[x + "," + j].XY = oriXY;
+
+	}(this), 500);
+
 
 	// this.cell[x + "," + j].XY = tmpXY;
 };
 
-Engine.prototype.tick = function(){
-	var oriXY = this.cell[x + "," + j].XY;
-	if(this.desXY.y === oriXY.y){
-		clearInterval(this._interval);
-		return;
-	}
-	var gravity = new XY(0,1);
-	oriXY.minus(gravity); 
-	this.cell[x + "," + j].XY = oriXY;
+Engine.prototype.tick = function(x, j){
+	
 };
 
 

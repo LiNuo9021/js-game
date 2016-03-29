@@ -156,30 +156,29 @@ Engine.prototype.move = function(){
 
 Engine.prototype.down = function(x, j){
 
-	this._interval = setInterval(function hello() {
+	var oriXY = this.cell[x + "," + j].XY;
 
-		var oriXY = this.cell[x + "," + j].XY;
+	if(this.desXY.y === oriXY.y){
+		clearTimeout(this._interval);
+		return;
+	}
+	var gravity = new XY(0,1);
+	oriXY.minus(gravity); 
+	this.cell[x + "," + j].XY = oriXY;
 
-		if(this.desXY.y === oriXY.y){
-			clearTimeout(this._interval);
-			return;
-		}
-		var gravity = new XY(0,1);
-		oriXY.minus(gravity); 
-		this.cell[x + "," + j].XY = oriXY;
-
-	}(this), 500);
+	this._interval = setTimeout(this.down.bind(this), 500);//没有立即执行
 
 
 	// this.cell[x + "," + j].XY = tmpXY;
 };
 
-Engine.prototype.tick = function(x, j){
-	
-};
+// function loop(e){
+//    setTimeout(function(e2){
+//    		console.log(this);
+//       // loop();
 
-
-
+//   }.bind(e), 1000);
+// }
 
 /*
 	使空列右侧的列整体左移

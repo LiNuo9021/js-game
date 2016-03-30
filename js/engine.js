@@ -128,7 +128,6 @@ Engine.prototype.move = function(){
 					var tmpXY = stillCell.XY;
 					this.desXY = new XY(x, (minY+1));
 					
-					// tmpXY.minus(gravity);
 					this.down(x, j);
 					// this.cell[x + "," + j].XY = tmpXY;//改变了属性值，还要改变属性名
 					this.cell[tmpXY.x + "," + tmpXY.y] = this.cell[x + "," + j];
@@ -154,31 +153,83 @@ Engine.prototype.move = function(){
 	this.left(emptyCol);
 };
 
+// Engine.prototype.down = function(x, j){
+
+// 	var oriXY = this.cell[x + "," + j].XY;
+
+// 	if(this.desXY.y === oriXY.y){
+// 		clearTimeout(this._interval);
+// 		return;
+// 	}
+// 	var gravity = new XY(0,1);
+// 	oriXY.minus(gravity); 
+// 	this.cell[x + "," + j].XY = oriXY;
+
+// 	this._interval = setTimeout(this.down.bind(this, x ,j), 0);//没有立即执行
+// };
+
+
+// Engine.prototype.down = function(x, j){
+
+// 	this._interval = setTimeout(function(){
+// 		console.log("in");
+// 		// var oriXY = this.cell[x + "," + j].XY;
+
+// 		// if(this.desXY.y === oriXY.y){
+// 		// 	clearTimeout(this._interval);
+// 		// 	return;
+// 		// }
+// 		// var gravity = new XY(0,1);
+// 		// oriXY.minus(gravity); 
+// 		// this.cell[x + "," + j].XY = oriXY;
+
+// 		// this.down.bind(this, x ,j);
+// 	}, 0);
+// };
+
 Engine.prototype.down = function(x, j){
 
-	var oriXY = this.cell[x + "," + j].XY;
+	console.log("in");
+	
+	this._interval = setTimeout(function(){
+		console.log("in");
+		// var oriXY = this.cell[x + "," + j].XY;
 
-	if(this.desXY.y === oriXY.y){
-		clearTimeout(this._interval);
-		return;
-	}
-	var gravity = new XY(0,1);
-	oriXY.minus(gravity); 
-	this.cell[x + "," + j].XY = oriXY;
+		// if(this.desXY.y === oriXY.y){
+		// 	clearTimeout(this._interval);
+		// 	return;
+		// }
+		// var gravity = new XY(0,1);
+		// oriXY.minus(gravity); 
+		// this.cell[x + "," + j].XY = oriXY;
 
-	this._interval = setTimeout(this.down.bind(this), 500);//没有立即执行
-
-
-	// this.cell[x + "," + j].XY = tmpXY;
+		// this.down.bind(this, x ,j);
+	}, 0);
 };
 
-// function loop(e){
-//    setTimeout(function(e2){
-//    		console.log(this);
-//       // loop();
 
-//   }.bind(e), 1000);
-// }
+// MDN：
+// (function loop(){
+//    setTimeout(function() {
+//       // Your logic here
+
+//       loop();
+//   }, delay);
+// })();
+
+// Sof：
+// (function foo() {
+//     ...
+//     setTimeout(foo, delay);
+// })();
+
+// Sof：
+// setInterval(function hello() {
+//   console.log('world');
+//   return hello;
+// }(), 5000);
+
+
 
 /*
 	使空列右侧的列整体左移
